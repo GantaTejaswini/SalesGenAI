@@ -1,8 +1,22 @@
+google-genai
+pydantic[email]
+python-dotenv
+tenacity
+rich
 langchain
 langchain-google-genai
 langgraph
-google-genai
-pydantic
-python-dotenv
 fastapi
 uvicorn
+pytest
+pytest-mock
+
+# Phase 1 additions
+sqlalchemy
+alembic
+psycopg2-binary
+passlib[bcrypt]
+pyjwt
+python-multipart
+redis
+celery

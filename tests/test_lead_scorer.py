@@ -1,4 +1,4 @@
-from models.lead_model import Lead
+from schemas.lead_schema import Lead
 from engines.company_analysis import analyse_company
 from engines.lead_scorer import score_lead
 

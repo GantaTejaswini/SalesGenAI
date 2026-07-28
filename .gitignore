@@ -2,4 +2,7 @@
 venv/
 __pycache__/
 *.pyc
-https://github.com/GantaTejaswini/SalesGenAI.git
+*.db
+*.sqlite3
+uploads/
+.pytest_cache/
