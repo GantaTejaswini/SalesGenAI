@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SalesGenie AI 🤖 | Lead Intelligence & Automated Sales Platform</title>
+  <meta name="description" content="Automate lead research, scoring, cold outreach, conversation intelligence, and follow-up strategy with AI.">
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #07090f; /* Deeper dark for high contrast */
+      --bg-card: rgba(18, 26, 43, 0.4); /* More transparent for glass */
+      --bg-card-hover: rgba(26, 37, 60, 0.55);
+      --border-color: rgba(255, 255, 255, 0.12);
+      --border-glow: rgba(0, 201, 167, 0.4);
+      
+      --teal: #00C9A7;
+      --teal-glow: rgba(0, 201, 167, 0.35);
+      --purple: #845EC2;
+      --purple-glow: rgba(132, 94, 194, 0.35);
+      --gold: #F9C846;
+      --gold-glow: rgba(249, 200, 70, 0.35);
+      --red: #FF6B6B;
+      --red-glow: rgba(255, 107, 107, 0.35);
+      --green: #06D6A0;
+      
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --text-dim: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(132, 94, 194, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 85% 90%, rgba(0, 201, 167, 0.2) 0%, transparent 55%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Apple Glassy Aesthetic Classes ── */
+    .glass-panel {
+      background: var(--bg-card);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .glass-panel:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      background: rgba(7, 9, 15, 0.6);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+      box-shadow: 0 0 25px var(--teal-glow);
+    }
+
+    .brand-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(to right, #ffffff, var(--teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-tag {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Top Navigation ── */
+    .top-nav {
+      display: flex;
+      gap: 1.5rem;
+      margin-left: 3.5rem;
+    }
+    .top-nav-item {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.6rem 1.25rem;
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    .top-nav-item:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .top-nav-item.active {
+      color: var(--teal);
+      background: rgba(0, 201, 167, 0.15);
+      box-shadow: 0 0 20px var(--teal-glow);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(6, 214, 160, 0.15);
+      border: 1px solid rgba(6, 214, 160, 0.3);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: pulse 2s infinite;
+    }
+    
+    .logout-btn {
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+    }
+    
+    .logout-btn:hover {
+      color: var(--red);
+      background: rgba(255,255,255,0.05);
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── Main Layout ── */
+    main {
+      flex: 1;
+      padding: 2.5rem;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* View system */
+    .view-section {
+      display: none;
+      width: 100%;
+      animation: viewFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    @keyframes viewFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .view-section.active {
+      display: block;
+    }
+
+    /* ── Forms and Inputs ── */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: rgba(11, 15, 25, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.3s ease;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--teal);
+      background: rgba(11, 15, 25, 0.9);
+      box-shadow: 0 0 0 3px rgba(0, 201, 167, 0.2), inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.9rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--teal), #0081CF);
+      color: #0b0f19;
+      box-shadow: 0 8px 25px var(--teal-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px var(--teal-glow);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ── Auth Views ── */
+    #auth-layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(132, 94, 194, 0.3) 0%, transparent 60%);
+    }
+    
+    .auth-card {
+      width: 100%;
+      max-width: 440px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+    
+    .auth-card .brand-logo {
+      margin: 0 auto 1.5rem auto;
+      width: 60px;
+      height: 60px;
+      font-size: 2rem;
+      border-radius: 18px;
+    }
+    
+    .auth-card h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .auth-card p {
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+    }
+    
+    .auth-switch {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    
+    .auth-switch a {
+      color: var(--teal);
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .auth-switch a:hover { text-decoration: underline; }
+
+    /* ── Dashboard Grid ── */
+    #view-dashboard.active {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .dash-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+    
+    .dash-kpi-card {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .dash-kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .dash-kpi-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+    
+    .icon-blue { background: rgba(0, 129, 207, 0.15); color: #0081CF; box-shadow: 0 0 15px rgba(0, 129, 207, 0.2); }
+    .icon-green { background: rgba(6, 214, 160, 0.15); color: var(--green); box-shadow: 0 0 15px rgba(6, 214, 160, 0.2); }
+    .icon-yellow { background: rgba(249, 200, 70, 0.15); color: var(--gold); box-shadow: 0 0 15px rgba(249, 200, 70, 0.2); }
+    .icon-red { background: rgba(255, 107, 107, 0.15); color: var(--red); box-shadow: 0 0 15px rgba(255, 107, 107, 0.2); }
+    
+    .dash-kpi-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 0.5rem;
+      line-height: 1;
+    }
+    
+    .dash-kpi-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    
+    .dash-kpi-sub {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+    
+    .dash-charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr 1fr;
+      gap: 2rem;
+    }
+    
+    .dash-chart-card {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .dash-chart-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .score-circle {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--bg-dark) 60%, transparent 61%),
+                  conic-gradient(var(--teal) calc(var(--score-pct, 88) * 1%), rgba(255,255,255,0.05) 0);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 35px var(--teal-glow);
+    }
+
+    .score-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--teal);
+    }
+
+    .score-lbl {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* ── Distribution Bars ── */
+    .dist-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .dist-label {
+      width: 140px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .dist-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      box-shadow: 0 0 8px currentColor;
+    }
+    .dist-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .dist-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ── Pipeline/Leads View ── */
+    #view-pipeline.active {
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 2.5rem;
+    }
+
+    /* ── Badges ── */
+    .badge-pill {
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: inline-block;
+      backdrop-filter: blur(10px);
+    }
+    .badge-hot { background: rgba(255, 107, 107, 0.15); color: var(--red); border: 1px solid rgba(255,107,107,0.3); }
+    .badge-warm { background: rgba(249, 200, 70, 0.15); color: var(--gold); border: 1px solid rgba(249,200,70,0.3); }
+    .badge-cold { background: rgba(0, 129, 207, 0.15); color: #0081CF; border: 1px solid rgba(0,129,207,0.3); }
+
+    /* ── Details Blocks ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .info-box {
+      background: rgba(11, 15, 25, 0.3);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .info-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-body {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    .bullet-list {
+      list-style: none;
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .bullet-list li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+    }
+
+    .email-box {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-glow);
+      border-radius: 16px;
+      padding: 1.5rem;
+      font-family: monospace;
+      white-space: pre-wrap;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    /* ── Outreach & Conversations ── */
+    .list-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .list-item {
+      padding: 1.5rem;
+      cursor: pointer;
+    }
+    
+    .list-item h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+    
+    .list-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    
+    /* ── Tabs inside tools ── */
+    .tabs-header {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 0.8rem 1.25rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: viewFadeIn 0.3s ease; }
+    
+    /* Progress */
+    .progress-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 1rem;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(0, 201, 167, 0.1);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 1s infinite cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      margin-bottom: 1.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Auth Layout -->
+  <div id="auth-layout">
+    <!-- Login View -->
+    <div id="view-login" class="view-section active">
+      <div class="glass-panel auth-card">
+        <div class="brand-logo"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        <h2>Welcome Back</h2>
+        <p>Sign in to SalesGenie AI</p>
+        
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group" style="text-align: left;">
+            <label class="form-label">Email</label>
+            <input type="email" id="loginEmail" class="form-input" required value="demo@salesgenie.ai">
+          </div>
+          <div class="form-group" style="text-align: left;">
+            <label class="form-label">Password</label>
+            <input type="password" id="loginPassword" class="form-input" required value="demo">
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Sign In</button>
+        </form>
+        <div class="auth-switch">
+          Don't have an account? <a onclick="switchAuth('register')">Sign up</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Register View -->
+    <div id="view-register" class="view-section">
+      <div class="glass-panel auth-card">
+        <div class="brand-logo"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        <h2>Create Account</h2>
+        <p>Join SalesGenie AI today</p>
+        
+        <form id="registerForm" onsubmit="handleRegister(event)">
+          <div class="form-group" style="text-align: left;">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="regName" class="form-input" required>
+          </div>
+          <div class="form-group" style="text-align: left;">
+            <label class="form-label">Email</label>
+            <input type="email" id="regEmail" class="form-input" required>
+          </div>
+          <div class="form-group" style="text-align: left;">
+            <label class="form-label">Password</label>
+            <input type="password" id="regPassword" class="form-input" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Create Account</button>
+        </form>
+        <div class="auth-switch">
+          Already have an account? <a onclick="switchAuth('login')">Sign in</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Layout -->
+  <div id="app-layout" style="display: none; width: 100%; min-height: 100vh; flex-direction: column;">
+    <!-- Header -->
+    <header>
+      <div style="display: flex; align-items: center;">
+        <div class="brand">
+          <div class="brand-logo"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <div>
+            <div class="brand-title">SalesGenie AI</div>
+            <div class="brand-tag">AI Lead Intelligence & Outreach Engine</div>
+          </div>
+        </div>
+        <nav class="top-nav">
+          <a class="top-nav-item active" onclick="switchMainView('dashboard')">Dashboard</a>
+          <a class="top-nav-item" onclick="switchMainView('pipeline')">Leads</a>
+          <a class="top-nav-item" onclick="switchMainView('outreach')">Outreach</a>
+          <a class="top-nav-item" onclick="switchMainView('conversations')">Conversations</a>
+        </nav>
+      </div>
+      <div class="header-right">
+        <div class="status-badge">
+          <div class="status-dot"></div>
+          <span id="userNameDisplay">Gemini 2.0 Connected</span>
+        </div>
+        <button class="logout-btn" onclick="logout()" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+
+      <!-- DASHBOARD VIEW -->
+      <div id="view-dashboard" class="view-section active">
+        <div class="dash-kpi-grid">
+          <div class="glass-panel dash-kpi-card">
+            <div class="dash-kpi-header">
+              <div class="dash-kpi-icon icon-blue"><i class="fa-solid fa-user-group"></i></div>
+            </div>
+            <div class="dash-kpi-value" id="dashTotalLeads">0</div>
+            <div class="dash-kpi-label">Total Leads</div>
+            <div class="dash-kpi-sub" id="dashQualifiedLeads">0 qualified</div>
+          </div>
+          <div class="glass-panel dash-kpi-card">
+            <div class="dash-kpi-header">
+              <div class="dash-kpi-icon icon-green"><i class="fa-solid fa-dollar-sign"></i></div>
+            </div>
+            <div class="dash-kpi-value" id="dashPipelineValue">-</div>
+            <div class="dash-kpi-label">Pipeline Value</div>
+          </div>
+          <div class="glass-panel dash-kpi-card">
+            <div class="dash-kpi-header">
+              <div class="dash-kpi-icon icon-yellow"><i class="fa-regular fa-clock"></i></div>
+            </div>
+            <div class="dash-kpi-value" id="dashResponseTime">-</div>
+            <div class="dash-kpi-label">Avg Response Time</div>
+          </div>
+          <div class="glass-panel dash-kpi-card">
+            <div class="dash-kpi-header">
+              <div class="dash-kpi-icon icon-red"><i class="fa-solid fa-award"></i></div>
+            </div>
+            <div class="dash-kpi-value" id="dashClosedWon">-</div>
+            <div class="dash-kpi-label">Closed Won</div>
+          </div>
+        </div>
+
+        <div class="dash-charts-grid">
+          <div class="glass-panel dash-chart-card">
+            <div class="dash-chart-title"><i class="fa-solid fa-bullseye" style="color: var(--teal)"></i> Average Signal Score</div>
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 1rem 0;">
+              <div class="score-circle" id="dashScoreCircle" style="width: 180px; height: 180px;">
+                <div class="score-val" id="dashScoreVal" style="font-size: 3.5rem; color: var(--red);">0</div>
+                <div class="score-lbl" id="dashConversion" style="font-size: 0.85rem;">0% conversion</div>
+              </div>
+              <div style="margin-top: 2rem; color: var(--text-muted); font-size: 0.95rem; font-weight: 500;" id="dashScoredCount">Across 0 scored leads</div>
+            </div>
+          </div>
+          <div class="glass-panel dash-chart-card">
+            <div class="dash-chart-title"><i class="fa-solid fa-chart-simple" style="color: var(--purple)"></i> Pipeline by Status</div>
+            <div style="position: relative; height: 300px; width: 100%;">
+              <canvas id="pipelineChart"></canvas>
+            </div>
+          </div>
+          <div class="glass-panel dash-chart-card">
+            <div class="dash-chart-title"><i class="fa-solid fa-chart-line" style="color: var(--gold)"></i> Priority Distribution</div>
+            <div id="priorityDistContainer" style="margin-bottom: 2.5rem;">
+               <!-- populated dynamically -->
+            </div>
+            <div class="dash-chart-title" style="font-size: 0.95rem; margin-bottom: 1.25rem; color: var(--text-muted);">Industry Breakdown</div>
+            <div id="industryDistContainer">
+               <!-- populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PIPELINE/LEADS VIEW -->
+      <div id="view-pipeline" class="view-section">
+        <!-- Left Column: Input Form -->
+        <section>
+          <div class="glass-panel" style="padding: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+              <div style="font-family: 'Outfit'; font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-sliders" style="color: var(--teal);"></i>
+                Lead Prospect Input
+              </div>
+              <button type="button" class="btn btn-secondary" onclick="loadDemoData()" style="width: auto; padding: 0.5rem 1rem; font-size: 0.85rem;">
+                <i class="fa-solid fa-bolt" style="color: var(--gold);"></i> Load Demo
+              </button>
+            </div>
+
+            <form id="pipelineForm" onsubmit="runPipeline(event)">
+              <div class="form-group">
+                <label class="form-label">Company Name *</label>
+                <input type="text" id="company_name" class="form-input" placeholder="e.g. InnovateAI Labs" required>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Industry *</label>
+                  <input type="text" id="industry" class="form-input" placeholder="e.g. Artificial Intelligence" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Contact Name *</label>
+                  <input type="text" id="contact_name" class="form-input" placeholder="e.g. Mark Chen" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Business Email *</label>
+                  <input type="email" id="email" class="form-input" placeholder="e.g. mark@innovateai.com" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Funding Stage</label>
+                  <select id="funding_stage" class="form-select">
+                    <option value="Seed">Seed</option>
+                    <option value="Series A">Series A</option>
+                    <option value="Series B" selected>Series B</option>
+                    <option value="Series C+">Series C+</option>
+                    <option value="Public">Public</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Company Size</label>
+                  <input type="text" id="company_size" class="form-input" placeholder="e.g. 50-100 employees">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Annual Revenue</label>
+                  <input type="text" id="annual_revenue" class="form-input" placeholder="e.g. $10M - $20M">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Technology Stack</label>
+                <input type="text" id="technology_stack" class="form-input" placeholder="e.g. Python, TensorFlow, AWS, FastAPI">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Sales Meeting Transcript (Optional)</label>
+                <textarea id="transcript" class="form-textarea" rows="4" placeholder="Paste sales call transcript or meeting notes here to analyze sentiment and generate follow-up recommendations..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" id="submitBtn" style="margin-top: 1rem;">
+                <i class="fa-solid fa-brain"></i> Execute AI Intelligence Pipeline
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <!-- Right Column: Results Dashboard -->
+        <section>
+          <!-- Initial Empty State -->
+          <div id="emptyState" class="glass-panel" style="text-align: center; padding: 6rem 2rem;">
+            <i class="fa-solid fa-chart-pie" style="font-size: 4rem; color: var(--text-dim); margin-bottom: 1.5rem;"></i>
+            <h3 style="font-family: 'Outfit'; font-size: 1.5rem;">No Lead Intelligence Generated Yet</h3>
+            <p style="margin-top: 1rem; color: var(--text-muted); font-size: 1rem; line-height: 1.6;">Fill out the prospect form or click "Load Demo" on the left, then run the pipeline to view real-time AI scoring, company qualification, cold outreach email, and conversation insights.</p>
+          </div>
+
+          <!-- Loading Spinner -->
+          <div id="loadingOverlay" class="glass-panel progress-overlay">
+            <div class="spinner"></div>
+            <h3 style="font-family: 'Outfit'; font-size: 1.5rem; margin-bottom: 0.75rem;">Running SalesGenie AI Pipeline...</h3>
+            <p id="progressText" style="color: var(--text-muted); font-size: 1rem;">Analyzing company profile & calculating qualification score...</p>
+          </div>
+
+          <!-- Results Grid -->
+          <div id="resultsContainer" style="display: none; flex-direction: column; gap: 2rem;">
+            
+            <!-- Score Banner -->
+            <div class="glass-panel" style="display: grid; grid-template-columns: auto 1fr auto; gap: 2rem; align-items: center; padding: 2rem; background: linear-gradient(135deg, rgba(132, 94, 194, 0.15), rgba(0, 201, 167, 0.15)); border-color: var(--teal-glow);">
+              <div class="score-circle" id="scoreCircle">
+                <div class="score-val" id="scoreVal">--</div>
+                <div class="score-lbl">SCORE</div>
+              </div>
+
+              <div>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                  <h3 id="leadCompanyHeader" style="font-family: 'Outfit'; font-size: 1.6rem;">Company Name</h3>
+                  <div id="priorityBadge" class="badge-pill badge-hot">HOT</div>
+                </div>
+                <p id="recommendedActionText" style="color: var(--text-muted); line-height: 1.5;">Recommended Action will appear here...</p>
+              </div>
+
+              <div style="text-align: right;">
+                <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Conversion Prob.</div>
+                <div style="font-family: 'Outfit'; font-size: 2rem; font-weight: 800; color: var(--green);" id="conversionProbText">--%</div>
+              </div>
+            </div>
+
+            <!-- Detail Tabs Container -->
+            <div class="glass-panel" style="padding: 2rem;">
+              <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchPipelineTab('insights')"><i class="fa-solid fa-magnifying-glass-chart"></i> Company Insights</button>
+                <button class="tab-btn" onclick="switchPipelineTab('outreach')"><i class="fa-solid fa-paper-plane"></i> Outreach Email</button>
+                <button class="tab-btn" onclick="switchPipelineTab('conversation')"><i class="fa-solid fa-comments"></i> Conversation Analysis</button>
+                <button class="tab-btn" onclick="switchPipelineTab('followup')"><i class="fa-solid fa-bullseye"></i> Follow-Up Strategy</button>
+              </div>
+
+              <!-- Tab 1: Company Insights -->
+              <div id="tab-insights" class="tab-content active">
+                <div class="info-grid">
+                  <div class="info-box">
+                    <div class="info-title"><i class="fa-solid fa-triangle-exclamation"></i> Business Pain Points</div>
+                    <div class="info-body" id="businessNeeds">--</div>
+                  </div>
+                  <div class="info-box">
+                    <div class="info-title"><i class="fa-solid fa-lightbulb"></i> Platform Opportunities</div>
+                    <div class="info-body" id="opportunities">--</div>
+                  </div>
+                  <div class="info-box">
+                    <div class="info-title"><i class="fa-solid fa-chart-line"></i> Industry Trends</div>
+                    <div class="info-body" id="industryAnalysis">--</div>
+                  </div>
+                  <div class="info-box">
+                    <div class="info-title"><i class="fa-solid fa-clipboard-check"></i> Qualification Reasoning</div>
+                    <div class="info-body" id="qualificationReasoning">--</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 2: Outreach Email -->
+              <div id="tab-outreach" class="tab-content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                  <div style="font-size: 0.95rem; color: var(--text-muted);">Recommended Channel: <strong id="outreachChannel" style="color: var(--teal);">--</strong> | Timing: <strong id="outreachTiming" style="color: var(--gold);">--</strong></div>
+                  <button class="btn btn-secondary" onclick="copyEmail()" style="width: auto; padding: 0.5rem 1rem; font-size: 0.85rem;">
+                    <i class="fa-regular fa-copy"></i> Copy Email
+                  </button>
+                </div>
+                <div class="info-box" style="margin-bottom: 1.5rem;">
+                  <div class="info-title"><i class="fa-solid fa-heading"></i> Subject Line</div>
+                  <div class="info-body" id="emailSubject" style="font-weight: 600; color: var(--gold); font-size: 1.1rem;">--</div>
+                </div>
+                <div class="email-box" id="emailBody">--</div>
+              </div>
+
+              <!-- Tab 3: Conversation Intelligence -->
+              <div id="tab-conversation" class="tab-content">
+                <div id="noTranscriptNotice" style="color: var(--text-muted); padding: 3rem; text-align: center; display: none; font-size: 1.1rem;">
+                  No meeting transcript was provided for this lead pipeline run.
+                </div>
+                <div id="conversationContent">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div style="font-size: 1.1rem; font-weight: 700; font-family: 'Outfit';">Meeting Transcript Summary</div>
+                    <div id="sentimentBadge" class="badge-pill" style="background: rgba(6, 214, 160, 0.2); color: var(--green); border: 1px solid var(--green);">POSITIVE SENTIMENT</div>
+                  </div>
+                  <div class="info-box" style="margin-bottom: 1.5rem;">
+                    <div class="info-body" id="meetingSummary" style="font-size: 1.05rem;">--</div>
+                  </div>
+                  <div class="info-grid">
+                    <div class="info-box">
+                      <div class="info-title"><i class="fa-solid fa-list-check"></i> Key Discussion Points</div>
+                      <ul class="bullet-list" id="discussionPointsList"></ul>
+                    </div>
+                    <div class="info-box">
+                      <div class="info-title"><i class="fa-solid fa-circle-check"></i> Action Items</div>
+                      <ul class="bullet-list" id="actionItemsList"></ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tab 4: Follow-Up Strategy -->
+              <div id="tab-followup" class="tab-content">
+                <div id="noFollowupNotice" style="color: var(--text-muted); padding: 3rem; text-align: center; display: none; font-size: 1.1rem;">
+                  Follow-up recommendations require a sales meeting transcript.
+                </div>
+                <div id="followupContent">
+                  <div class="info-grid" style="margin-bottom: 1.5rem;">
+                    <div class="info-box">
+                      <div class="info-title"><i class="fa-solid fa-shield-halved"></i> Deal Risk Assessment</div>
+                      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                        <div id="dealRiskBadge" class="badge-pill badge-hot">LOW RISK</div>
+                      </div>
+                      <div class="info-body" id="dealRiskReasoning" style="font-size: 0.95rem;">--</div>
+                    </div>
+                    <div class="info-box">
+                      <div class="info-title"><i class="fa-solid fa-clock"></i> Recommended Timing & Channel</div>
+                      <div class="info-body" style="font-size: 1.1rem;"><strong id="followupTiming">--</strong> via <strong id="followupChannel" style="color: var(--teal);">--</strong></div>
+                    </div>
+                  </div>
+                  <div class="info-box" style="margin-bottom: 1.5rem;">
+                    <div class="info-title"><i class="fa-solid fa-comment-dots"></i> Talking Points to Reinforce</div>
+                    <ul class="bullet-list" id="talkingPointsList"></ul>
+                  </div>
+                  <div class="info-title" style="margin-bottom: 0.75rem;"><i class="fa-solid fa-envelope-open-text"></i> Smart Follow-Up Message</div>
+                  <div class="email-box" id="followupMessage">--</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- OUTREACH VIEW -->
+      <div id="view-outreach" class="view-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <h2 style="font-family: 'Outfit'; font-size: 2rem;">Outreach Campaigns</h2>
+          <button class="btn btn-primary" style="width: auto;" onclick="switchMainView('pipeline')"><i class="fa-solid fa-plus"></i> New Campaign</button>
+        </div>
+        
+        <div class="list-grid">
+          <div class="glass-panel list-item">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+              <span class="badge-pill badge-hot" style="font-size: 0.7rem;">Cold Email</span>
+              <span style="color: var(--text-muted); font-size: 0.8rem;">2 hours ago</span>
+            </div>
+            <h4>InnovateAI Labs</h4>
+            <p>Subject: Scaling AI ops without increasing headcount...</p>
+            <div style="font-size: 0.85rem; color: var(--teal);"><i class="fa-solid fa-check"></i> Generated successfully</div>
+          </div>
+          <div class="glass-panel list-item">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+              <span class="badge-pill badge-warm" style="font-size: 0.7rem;">LinkedIn DM</span>
+              <span style="color: var(--text-muted); font-size: 0.8rem;">Yesterday</span>
+            </div>
+            <h4>TechCorp Solutions</h4>
+            <p>Subject: Connecting re: Enterprise Software pipeline...</p>
+            <div style="font-size: 0.85rem; color: var(--teal);"><i class="fa-solid fa-check"></i> Sent to integration</div>
+          </div>
+          <div class="glass-panel list-item">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+              <span class="badge-pill badge-cold" style="font-size: 0.7rem;">Proposal</span>
+              <span style="color: var(--text-muted); font-size: 0.8rem;">2 days ago</span>
+            </div>
+            <h4>CyberShield Tech</h4>
+            <p>Subject: Proposal for Q3 Cybersecurity implementation...</p>
+            <div style="font-size: 0.85rem; color: var(--text-dim);"><i class="fa-solid fa-pen"></i> Drafted</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONVERSATIONS VIEW -->
+      <div id="view-conversations" class="view-section">
+         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <h2 style="font-family: 'Outfit'; font-size: 2rem;">Conversation Intelligence</h2>
+          <button class="btn btn-primary" style="width: auto;" onclick="switchMainView('pipeline')"><i class="fa-solid fa-upload"></i> Analyze New Transcript</button>
+        </div>
+        
+        <div class="glass-panel" style="padding: 2rem;">
+          <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem;">
+            <h4 style="font-size: 1.1rem;">TechCorp Solutions - Discovery Call</h4>
+            <span class="badge-pill" style="background: rgba(6, 214, 160, 0.2); color: var(--green); border: 1px solid var(--green);">POSITIVE</span>
+          </div>
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6;">
+            Client is actively looking to automate their lead qualification. They currently use Salesforce and have approved budget for Q3. Main concern is integration time.
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+             <div>
+               <h5 style="color: var(--teal); margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem;">Action Items</h5>
+               <ul class="bullet-list" style="margin-left: 0;">
+                 <li>Send technical proposal by Thursday</li>
+                 <li>Include custom ROI analysis</li>
+               </ul>
+             </div>
+             <div>
+               <h5 style="color: var(--gold); margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem;">Next Steps</h5>
+               <ul class="bullet-list" style="margin-left: 0;">
+                 <li>Follow-up meeting scheduled for Tuesday</li>
+               </ul>
+             </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // --- Auth Logic ---
+    function switchAuth(view) {
+      document.querySelectorAll('#auth-layout .view-section').forEach(el => el.classList.remove('active'));
+      document.getElementById('view-' + view).classList.add('active');
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value;
+      const pass = document.getElementById('loginPassword').value;
+      
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({email: email, password: pass})
+        });
+        const data = await res.json();
+        if(res.ok) {
+          localStorage.setItem('salesgenie_token', data.token);
+          localStorage.setItem('salesgenie_user', data.user.name);
+          showApp();
+        } else {
+          alert('Login failed: ' + data.detail);
+        }
+      } catch(e) {
+        alert('Error: ' + e);
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const pass = document.getElementById('regPassword').value;
+      
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({name: name, email: email, password: pass})
+        });
+        const data = await res.json();
+        if(res.ok) {
+          localStorage.setItem('salesgenie_token', data.token);
+          localStorage.setItem('salesgenie_user', data.user.name);
+          showApp();
+        } else {
+          alert('Registration failed: ' + data.detail);
+        }
+      } catch(e) {
+        alert('Error: ' + e);
+      }
+    }
+    
+    function logout() {
+      localStorage.removeItem('salesgenie_token');
+      localStorage.removeItem('salesgenie_user');
+      document.getElementById('app-layout').style.display = 'none';
+      document.getElementById('auth-layout').style.display = 'flex';
+      switchAuth('login');
+    }
+
+    function showApp() {
+      document.getElementById('auth-layout').style.display = 'none';
+      document.getElementById('app-layout').style.display = 'flex';
+      const user = localStorage.getItem('salesgenie_user');
+      document.getElementById('userNameDisplay').innerText = user ? `Welcome, ${user}` : 'Gemini 2.0 Connected';
+      
+      // Load dashboard by default
+      switchMainView('dashboard');
+    }
+
+    // Check session on load
+    if (localStorage.getItem('salesgenie_token')) {
+      showApp();
+    }
+
+
+    // --- App Logic ---
+    function loadDemoData() {
+      document.getElementById('company_name').value = "InnovateAI Labs";
+      document.getElementById('industry').value = "Artificial Intelligence";
+      document.getElementById('contact_name').value = "Mark Chen";
+      document.getElementById('email').value = "mark@innovateai.com";
+      document.getElementById('company_size').value = "50-100 employees";
+      document.getElementById('funding_stage').value = "Series B";
+      document.getElementById('annual_revenue').value = "$10M - $20M";
+      document.getElementById('technology_stack').value = "Python, TensorFlow, AWS, FastAPI";
+      document.getElementById('transcript').value = 
+`Mark: We're growing fast but our sales process is completely manual.
+We have no system for qualifying inbound leads efficiently.
+
+Alex: That's exactly our sweet spot. We automate the entire 
+qualification workflow using AI. Your team only touches the leads that matter.
+
+Mark: How does pricing work for a team our size?
+
+Alex: For 50-100 employees we have a growth tier. 
+I can put together a custom quote this week.
+
+Mark: That works. Send it over and we can discuss next Friday.`;
+    }
+
+    function switchPipelineTab(tabId) {
+      document.querySelectorAll('#view-pipeline .tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('#view-pipeline .tab-content').forEach(c => c.classList.remove('active'));
+      
+      event.currentTarget.classList.add('active');
+      document.getElementById('tab-' + tabId).classList.add('active');
+    }
+
+    async function runPipeline(e) {
+      e.preventDefault();
+
+      const leadData = {
+        company_name: document.getElementById('company_name').value,
+        industry: document.getElementById('industry').value,
+        contact_name: document.getElementById('contact_name').value,
+        email: document.getElementById('email').value,
+        company_size: document.getElementById('company_size').value,
+        funding_stage: document.getElementById('funding_stage').value,
+        annual_revenue: document.getElementById('annual_revenue').value,
+        technology_stack: document.getElementById('technology_stack').value,
+      };
+
+      const transcriptText = document.getElementById('transcript').value;
+
+      document.getElementById('emptyState').style.display = 'none';
+      document.getElementById('resultsContainer').style.display = 'none';
+      document.getElementById('loadingOverlay').style.display = 'flex';
+      document.getElementById('submitBtn').disabled = true;
+
+      try {
+        const response = await fetch('/api/pipeline', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lead: leadData,
+            transcript: transcriptText
+          })
+        });
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.detail || 'Pipeline execution failed');
+        }
+
+        const data = await response.json();
+        renderResults(data);
+
+      } catch (err) {
+        alert('Error executing pipeline: ' + err.message);
+      } finally {
+        document.getElementById('loadingOverlay').style.display = 'none';
+        document.getElementById('submitBtn').disabled = false;
+      }
+    }
+
+    function renderResults(data) {
+      const { lead, insight, score, email, conversation, followup } = data;
+
+      // Score Banner
+      document.getElementById('scoreVal').innerText = score.lead_score;
+      document.getElementById('scoreCircle').style.setProperty('--score-pct', score.lead_score);
+      document.getElementById('leadCompanyHeader').innerText = lead.company_name;
+      document.getElementById('recommendedActionText').innerText = score.recommended_action;
+      document.getElementById('conversionProbText').innerText = Math.round(score.conversion_probability * 100) + '%';
+
+      const prioBadge = document.getElementById('priorityBadge');
+      prioBadge.innerText = score.priority_level + ' PRIORITY';
+      prioBadge.className = 'badge-pill ' + (
+        score.priority_level === 'Hot' ? 'badge-hot' :
+        score.priority_level === 'Warm' ? 'badge-warm' : 'badge-cold'
+      );
+
+      // Insights Tab
+      document.getElementById('businessNeeds').innerText = insight.business_needs;
+      document.getElementById('opportunities').innerText = insight.opportunities;
+      document.getElementById('industryAnalysis').innerText = insight.industry_analysis;
+      document.getElementById('qualificationReasoning').innerText = insight.qualification_reasoning;
+
+      // Outreach Tab
+      document.getElementById('outreachChannel').innerText = email.channel_recommendation;
+      document.getElementById('outreachTiming').innerText = email.follow_up_timing;
+      document.getElementById('emailSubject').innerText = email.subject;
+      document.getElementById('emailBody').innerText = email.body;
+
+      // Conversation Tab
+      if (conversation) {
+        document.getElementById('noTranscriptNotice').style.display = 'none';
+        document.getElementById('conversationContent').style.display = 'block';
+        document.getElementById('meetingSummary').innerText = conversation.summary;
+        document.getElementById('sentimentBadge').innerText = conversation.sentiment.toUpperCase() + ' SENTIMENT';
+
+        document.getElementById('discussionPointsList').innerHTML = conversation.key_discussion_points.map(p => `<li>${p}</li>`).join('');
+        document.getElementById('actionItemsList').innerHTML = conversation.action_items.map(a => `<li>${a}</li>`).join('');
+      } else {
+        document.getElementById('conversationContent').style.display = 'none';
+        document.getElementById('noTranscriptNotice').style.display = 'block';
+      }
+
+      // Followup Tab
+      if (followup) {
+        document.getElementById('noFollowupNotice').style.display = 'none';
+        document.getElementById('followupContent').style.display = 'block';
+        document.getElementById('dealRiskReasoning').innerText = followup.deal_risk_reasoning;
+        document.getElementById('followupTiming').innerText = followup.timing;
+        document.getElementById('followupChannel').innerText = followup.channel;
+        document.getElementById('followupMessage').innerText = followup.follow_up_message;
+
+        const riskBadge = document.getElementById('dealRiskBadge');
+        riskBadge.innerText = followup.deal_risk + ' RISK';
+        riskBadge.className = 'badge-pill ' + (
+          followup.deal_risk === 'High' ? 'badge-hot' :
+          followup.deal_risk === 'Medium' ? 'badge-warm' : 'badge-cold'
+        );
+
+        document.getElementById('talkingPointsList').innerHTML = followup.talking_points.map(tp => `<li>${tp}</li>`).join('');
+      } else {
+        document.getElementById('followupContent').style.display = 'none';
+        document.getElementById('noFollowupNotice').style.display = 'block';
+      }
+
+      document.getElementById('resultsContainer').style.display = 'flex';
+    }
+
+    function copyEmail() {
+      const subject = document.getElementById('emailSubject').innerText;
+      const body = document.getElementById('emailBody').innerText;
+      const textToCopy = `Subject: ${subject}\n\n${body}`;
+      navigator.clipboard.writeText(textToCopy);
+      alert('Outreach email copied to clipboard!');
+    }
+
+    // -- View Switching --
+    function switchMainView(viewId) {
+      document.querySelectorAll('.top-nav-item').forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      
+      document.querySelectorAll('main .view-section').forEach(el => el.classList.remove('active'));
+      document.getElementById('view-' + viewId).classList.add('active');
+      
+      if(viewId === 'dashboard') {
+        loadDashboardData();
+      }
+    }
+
+    // -- Dashboard Data --
+    let pipelineChartInstance = null;
+
+    async function loadDashboardData() {
+      try {
+        const res = await fetch('/api/analytics');
+        const data = await res.json();
+        
+        document.getElementById('dashTotalLeads').innerText = data.total_leads;
+        document.getElementById('dashQualifiedLeads').innerText = data.qualified_leads + " qualified";
+        document.getElementById('dashPipelineValue').innerText = data.pipeline_value;
+        document.getElementById('dashResponseTime').innerText = "2.4 hrs";
+        document.getElementById('dashClosedWon').innerText = data.lead_status_distribution.Closed || 0;
+        
+        const score = data.avg_lead_score;
+        document.getElementById('dashScoreVal').innerText = score;
+        document.getElementById('dashConversion').innerText = data.conversion_rate + ' conversion';
+        document.getElementById('dashScoredCount').innerText = 'Across ' + data.total_leads + ' scored leads';
+        document.getElementById('dashScoreCircle').style.setProperty('--score-pct', score);
+        
+        const prioContainer = document.getElementById('priorityDistContainer');
+        prioContainer.innerHTML = `
+          <div class="dist-row">
+            <div class="dist-label"><div class="dist-dot" style="background: var(--red);"></div> High Priority</div>
+            <div class="dist-bar-bg"><div class="dist-bar-fill" style="background: var(--red); width: 45%;"></div></div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-label"><div class="dist-dot" style="background: var(--gold);"></div> Medium Priority</div>
+            <div class="dist-bar-bg"><div class="dist-bar-fill" style="background: var(--gold); width: 35%;"></div></div>
+          </div>
+          <div class="dist-row">
+            <div class="dist-label"><div class="dist-dot" style="background: var(--text-dim);"></div> Low Priority</div>
+            <div class="dist-bar-bg"><div class="dist-bar-fill" style="background: var(--text-dim); width: 20%;"></div></div>
+          </div>
+        `;
+        
+        const indContainer = document.getElementById('industryDistContainer');
+        const indColors = ['var(--teal)', 'var(--purple)', 'var(--green)', '#0081CF'];
+        let indHtml = '';
+        let i = 0;
+        for (const [ind, count] of Object.entries(data.industry_distribution)) {
+           const pct = (count / data.total_leads) * 100;
+           const color = indColors[i % indColors.length];
+           indHtml += `
+             <div class="dist-row">
+               <div class="dist-label" style="width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><div class="dist-dot" style="background: ${color};"></div> ${ind}</div>
+               <div class="dist-bar-bg"><div class="dist-bar-fill" style="background: ${color}; width: ${pct}%;"></div></div>
+             </div>
+           `;
+           i++;
+        }
+        indContainer.innerHTML = indHtml;
+
+        if (pipelineChartInstance) {
+          pipelineChartInstance.destroy();
+        }
+        const ctx = document.getElementById('pipelineChart').getContext('2d');
+        const labels = Object.keys(data.lead_status_distribution);
+        const counts = Object.values(data.lead_status_distribution);
+        
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = 'Inter';
+        
+        pipelineChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Leads',
+              data: counts,
+              backgroundColor: 'rgba(0, 201, 167, 0.6)',
+              borderColor: 'rgba(0, 201, 167, 1)',
+              borderWidth: 1,
+              borderRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(255, 255, 255, 0.05)' }
+              },
+              x: {
+                grid: { display: false }
+              }
+            }
+          }
+        });
+        
+      } catch(e) {
+        console.error("Failed to load dashboard:", e);
+      }
+    }
+  </script>
+</body>
+</html>

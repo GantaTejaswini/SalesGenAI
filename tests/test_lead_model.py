@@ -1,4 +1,4 @@
-from models.lead_model import Lead
+from schemas.lead_schema import Lead
 
 lead = Lead(
     company_name="TechCorp Solutions",
