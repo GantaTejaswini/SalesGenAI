@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1",
+    "companyName": "TechCorp Solutions",
+    "contactPerson": "Sarah Johnson, CTO",
+    "status": "Enterprise • Series C",
+    "companySize": "250-500 employees",
+    "revenue": "$45M - $60M",
+    "location": "San Francisco, CA",
+    "fundingStage": "Series C • $38M",
+    "techStack": ["Apex", "Python", "React", "Node.js", "Kubernetes", "PostgreSQL"],
+    "score": 92,
+    "insights": [
+      "High Growth Potential: Series C funding indicates rapid expansion phase with likely budget for new tools.",
+      "Tech Alignment: Current stack shows full compatibility with our integration capabilities.",
+      "Decision Maker: Active CTO engagement on data optimization initiatives."
+    ]
+  },
+  {
+    "id": "2",
+    "companyName": "InnovateAI Labs",
+    "contactPerson": "Mark Chen, VP Sales",
+    "status": "Mid-Market • Series A",
+    "companySize": "50-100 employees",
+    "revenue": "$10M - $15M",
+    "location": "Austin, TX",
+    "fundingStage": "Series A • $12M",
+    "techStack": ["Python", "FastAPI", "React", "Docker"],
+    "score": 85,
+    "insights": [
+      "Rapidly scaling sales team needing outreach automation.",
+      "Good technical alignment for immediate API integration."
+    ]
+  }
+]
