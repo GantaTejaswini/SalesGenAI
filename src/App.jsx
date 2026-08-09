@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import LeadsView from './components/LeadsView';
+import OutreachView from './components/OutreachView';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('leads');
+  const [activeTab, setActiveTab] = useState('outreach');
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
       <main>
         {activeTab === 'leads' && <LeadsView />}
-        {activeTab === 'outreach' && (
-          <div className="p-8 text-center text-gray-500">Outreach Module (Weeks 3–4)</div>
-        )}
+        {activeTab === 'outreach' && <OutreachView />}
         {activeTab === 'conversations' && (
           <div className="p-8 text-center text-gray-500">Conversations Module (Weeks 5–6)</div>
         )}
