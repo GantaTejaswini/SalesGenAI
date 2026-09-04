@@ -1,242 +1,81 @@
-# SalesGenie AI 🤖
-### AI Sales Assistant & Lead Intelligence Platform
+# AI-Powered Sales Forecasting — Backend API
 
-> Automating lead intelligence, personalised outreach, and sales conversation analysis using Large Language Models.
+A FastAPI server powered by Google Gemini 2.0 Flash. Provides AI-driven lead analysis, scoring, email generation, meeting analysis, and a full pipeline endpoint.
 
----
+## Quick Start
 
-## 📌 Project Overview
+```bash
+# 1. Create a virtual environment
+python -m venv venv
 
-Modern sales teams spend too much time manually researching prospects, writing outreach emails, and taking meeting notes. SalesGenie AI solves this by automating the entire sales intelligence workflow using AI.
+# 2. Activate it
+#    Windows:  venv\Scripts\activate
+#    Mac/Linux: source venv/bin/activate
 
-This repository contains the **AI & LLM Layer** of the SalesGenie AI platform — the core intelligence engine that powers lead analysis, scoring, outreach generation, conversation summarisation, and follow-up recommendations.
+# 3. Install dependencies
+pip install -r requirements.txt
 
----
+# 4. Set up your environment variables
+cp .env.example .env
+#    Edit .env and add your GEMINI_API_KEY (get one at https://aistudio.google.com/apikey)
 
-## 🧠 AI Engines Built
+# 5. Start the server
+uvicorn api_main:app --reload
+```
 
-| Engine | Input | Output |
-|---|---|---|
-| **Company Analysis** | Company details | Business needs, opportunities, qualification score |
-| **Lead Scoring** | Lead + Company analysis | Score (0–100), conversion probability, priority level |
-| **Outreach Generator** | Lead + Analysis + Score | Personalised cold email (subject + body) |
-| **Conversation Intelligence** | Meeting transcript | Summary, action items, key points, sentiment |
-| **Follow-Up Recommender** | Lead + Score + Conversation | Follow-up message, timing, channel, deal risk |
+Server runs at **http://127.0.0.1:8000**
 
----
+Interactive API docs at **http://127.0.0.1:8000/docs**
 
-## ⚙️ Tech Stack
+## Without a Gemini API Key
+
+The server works without `GEMINI_API_KEY` — it falls back to a deterministic heuristic engine that produces the same response shapes. This is useful for development and testing without incurring API costs.
+
+## Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/health` | Health check |
+| POST | `/api/analyse-lead` | Analyse a company profile, return insights + lead score |
+| POST | `/api/generate-email` | Generate a personalised cold outreach email |
+| POST | `/api/analyse-meeting` | Analyse a meeting transcript, extract structured intelligence |
+| POST | `/api/full-pipeline` | Run all four engines in one call (analysis + scoring + email + conversation) |
+
+## Tech Stack
 
 | Component | Technology |
-|---|---|
-| Language | Python 3.12 |
+|-----------|------------|
+| API Framework | FastAPI |
+| Server | Uvicorn |
 | AI Model | Google Gemini 2.0 Flash |
-| LLM Library | google-genai |
 | Data Validation | Pydantic |
-| API Framework | FastAPI (upcoming) |
-| Agent Orchestration | LangGraph (upcoming) |
-| Environment Management | python-dotenv |
-| Version Control | Git + GitHub |
+| Language | Python 3.12+ |
 
----
-
-## 📁 Project Structure
+## File Structure
 
 ```
-salesgenie-ai/
-│
-├── utils/
-│   └── llm_client.py          # Gemini API connection with retry logic
-│
-├── models/
-│   ├── lead_model.py          # Lead/prospect data structure
-│   ├── insight_model.py       # Company analysis output structure
-│   ├── score_model.py         # Lead score output structure
-│   ├── outreach_model.py      # Outreach email output structure
-│   ├── conversation_model.py  # Conversation summary structure
-│   └── followup_model.py      # Follow-up recommendation structure
-│
-├── prompts/
-│   └── analysis_prompts.py    # All AI prompt templates
-│
-├── engines/
-│   ├── company_analysis.py    # Company profile analysis engine
-│   ├── lead_scorer.py         # Lead scoring engine
-│   ├── outreach_engine.py     # Cold email generation engine
-│   ├── conversation_intelligence.py  # Meeting summarisation engine
-│   └── followup_engine.py     # Follow-up recommendation engine
-│
-├── tests/
-│   ├── test_llm.py
-│   ├── test_lead_model.py
-│   ├── test_company_analysis.py
-│   ├── test_lead_scorer.py
-│   ├── test_outreach_engine.py
-│   ├── test_conversation_intelligence.py
-│   └── test_followup_engine.py
-│
-├── main.py                    # Full pipeline entry point
-├── requirements.txt
-├── .env                       # API keys (not committed)
-├── .gitignore
-└── README.md
+backend/
+├── api_main.py        # FastAPI app with all 5 endpoints
+├── ai_service.py      # Gemini integration + deterministic fallback engine
+├── models.py          # Pydantic request/response models
+├── requirements.txt   # Python dependencies
+├── .env.example       # Template for environment variables
+└── README.md          # This file
 ```
 
----
+## Connecting to the Frontend
 
-## 🚀 Getting Started
+The frontend (React app in the parent directory) automatically connects to this server at `http://127.0.0.1:8000/api`. When the server is running, the app uses Gemini-powered AI. When it's offline, the app falls back to its built-in heuristic engine.
 
-### 1. Clone the Repository
+## Running Both Together
+
 ```bash
-git clone https://github.com/GantaTejaswini/SalesGenAI.git
-cd SalesGenAI
+# Terminal 1 — Backend
+cd backend
+source venv/bin/activate
+uvicorn api_main:app --reload
+
+# Terminal 2 — Frontend
+npm install
+npm run dev
 ```
-
-### 2. Create Virtual Environment
-```bash
-python -m venv venv
-```
-
-Activate it:
-- **Windows:** `venv\Scripts\activate`
-- **Mac/Linux:** `source venv/bin/activate`
-
-### 3. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Set Up API Key
-
-Create a `.env` file in the root folder:
-```
-GEMINI_API_KEY=your_gemini_api_key_here
-```
-
-Get your free Gemini API key at: **aistudio.google.com**
-
-### 5. Run the Full Pipeline
-```bash
-python main.py
-```
-
----
-
-## 🔄 Pipeline Flow
-
-```
-Lead Data
-    │
-    ▼
-Company Analysis Engine  ──►  Qualification Score + Business Insights
-    │
-    ▼
-Lead Scoring Engine  ──►  Score / Conversion Probability / Priority Level
-    │
-    ▼
-Outreach Generation Engine  ──►  Personalised Cold Email
-    │
-    ▼
-Conversation Intelligence Engine  ──►  Meeting Summary + Action Items
-    │
-    ▼
-Follow-Up Recommendation Engine  ──►  Next Best Action + Deal Risk
-```
-
----
-
-## 🧪 Running Tests
-
-Run any individual test:
-```bash
-python -m tests.test_company_analysis
-python -m tests.test_lead_scorer
-python -m tests.test_outreach_engine
-python -m tests.test_conversation_intelligence
-python -m tests.test_followup_engine
-```
-
----
-
-## 📊 Sample Output
-
-### Company Analysis
-```
-Qualification Score: 92/100
-Business Needs: Scaling sales operations without linear headcount increase...
-Opportunities: AI-driven lead scoring for enterprise accounts...
-```
-
-### Lead Score
-```
-Score: 94/100
-Conversion Probability: 88%
-Priority Level: Hot
-Recommended Action: Initiate immediate personalised outreach to VP of Sales...
-```
-
-### Generated Cold Email
-```
-Subject: Scaling TechCorp's sales velocity post-Series C
-
-Sarah, navigating the jump to Series C at TechCorp usually brings a 
-specific kind of pressure: keeping sales velocity high while CAC 
-threatens to do the same...
-```
-
-### Conversation Summary
-```
-Sentiment: Positive
-Key Points: Automating lead qualification, Salesforce integration, Q3 budget approved
-Action Items: Send proposal by Thursday, Include custom ROI analysis
-Next Steps: Follow-up meeting scheduled for Tuesday
-```
-
----
-
-## 📋 Requirements
-
-```
-google-genai
-langchain
-langchain-google-genai
-langgraph
-pydantic
-python-dotenv
-fastapi
-uvicorn
-```
-
----
-
-## 🗺️ Roadmap
-
-- [x] LLM Connection (Gemini 2.0)
-- [x] Company Analysis Engine
-- [x] Lead Scoring Engine
-- [x] Outreach Generation Engine
-- [x] Conversation Intelligence Engine
-- [x] Follow-Up Recommendation Engine
-- [x] Full Pipeline (main.py)
-- [ ] FastAPI Endpoints
-- [ ] LangGraph Multi-Agent System
-- [ ] Integration with Backend & Database Layer
-
----
-
-## 👥 Team
-
-This is a team internship project. The platform is divided into four layers:
-
-| Layer | Responsibility |
-|---|---|
-| **AI & LLM** | Intelligence engines, prompt engineering, LangGraph agents |
-| **Backend** | FastAPI server, business logic, API routing |
-| **Database** | PostgreSQL schema, data models, migrations |
-| **Deployment** | Docker, cloud hosting, CI/CD |
-
----
-
-## 📄 License
-
-This project is developed as part of an internship program.
